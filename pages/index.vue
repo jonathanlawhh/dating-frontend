@@ -2,7 +2,7 @@
   <v-row class="welcome-bg ma-0 fill-height align-center justify-center">
     <v-col cols="12">
       <p class="font-weight-bold text-center" style="font-size: 9rem">Who</p>
-      <p class="font-weight-bold text-center" style="font-size: 4rem">do you think you are<br>
+      <p class="font-weight-bold text-center" style="font-size: 3rem">do you think you are<br>
         <span class="dating-font-color">dating online</span>
       </p>
     </v-col>
@@ -50,7 +50,7 @@ export default {
 
 <style scoped>
 .dating-font-color {
-  background: -webkit-linear-gradient(#f39314, #e82971);
+  background: -webkit-linear-gradient(var(--custom-orange), var(--custom-pink));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

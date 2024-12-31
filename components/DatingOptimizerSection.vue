@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-card color="#f39314">
+        <v-card color="secondary">
           <v-card-item>
             <v-row>
               <v-col cols="12">

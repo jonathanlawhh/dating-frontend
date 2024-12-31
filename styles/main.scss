@@ -1,0 +1,32 @@
+@use 'vuetify' with (
+$body-font-family: "Roboto Mono"
+);
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300..700&display=swap');
+
+:root {
+  --custom-pink: #e82971;
+  --custom-orange: #f39314;
+}
+
+/* Code for Firefox */
+::-moz-selection {
+  color: #ffffff;
+  background-color: var(--custom-pink);
+}
+
+::selection {
+  color: #ffffff;
+  background-color: var(--custom-pink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 4px;
+  background: #eae7dc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--custom-pink);
+  border-radius: 2px;
+}
