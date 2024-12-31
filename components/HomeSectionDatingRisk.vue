@@ -23,7 +23,7 @@ export default {
   data: () => ({
     risks: ['Catfishing', 'Cyberbullying', 'Sexual Coercion', 'Stalking', 'Harassment', 'Unsafe Meetup', 'Identity Theft']
   }),
-  created() {
+  mounted() {
     this.risks.sort(() => Math.random() - 0.5);
   }
 }
