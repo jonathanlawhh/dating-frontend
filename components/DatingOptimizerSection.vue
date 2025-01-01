@@ -134,15 +134,23 @@
                         <v-col cols="12" md="6" lg="8">
                           <div v-if="preCheckData.length > 0">
                             <p class="font-weight-medium">Some information maybe incomplete</p>
+                            <p v-if="preCheckData.length > 2">**Please ensure at least {{ preCheckData.length - 2 }}
+                              more is fixed</p>
                             <div v-for="(pc, i) in preCheckData" :key="i">
                               - {{ pc.prompt }}
-                              <v-btn variant="text" @click="step = pc.page" size="small">Fix</v-btn>
+                              <v-btn variant="tonal" @click="step = pc.page" size="small">Fix</v-btn>
                             </div>
+                          </div>
+
+                          <div v-if="preCheckData.length === 0">
+                            <p class="font-weight-medium">All the required information is filled up</p>
+                            <p>May you get more dates after optimizing!</p>
                           </div>
                         </v-col>
 
                         <v-col cols="12" md="6" lg="4">
-                          <v-btn :disabled="flag_suggestions_loading" color="primary" size="large" width="100%"
+                          <v-btn :disabled="flag_suggestions_loading || preCheckData.length > 2" color="primary"
+                                 size="large" width="100%"
                                  @click="triggerGetSuggestions">
                             {{ flag_suggestions_loading ? 'Asking the AI...' : 'Get suggestions!' }}
                           </v-btn>
@@ -166,7 +174,8 @@
                                 <p><span class="font-weight-bold">Bio proposal</span> : {{ s.example_for_bio }}</p><br>
                                 <p><span class="font-weight-bold">Example</span> : {{ s.suggestion }}
                                 </p><br>
-                                <p><span class="font-weight-bold">Suggestion based on</span> : {{ s.example_from_potential_dates }}</p>
+                                <p><span class="font-weight-bold">Suggestion based on</span> :
+                                  {{ s.example_from_potential_dates }}</p>
                               </v-card-text>
                             </v-card>
                           </v-col>
@@ -184,7 +193,8 @@
           <v-divider></v-divider>
 
           <v-card-actions>
-            <v-btn v-if="step > 1 && !flag_suggestions_loading" variant="text" @click="preCheck(), step--" prepend-icon="mdi-chevron-left">
+            <v-btn v-if="step > 1 && !flag_suggestions_loading" variant="text" @click="preCheck(), step--"
+                   prepend-icon="mdi-chevron-left">
               Back
             </v-btn>
             <v-spacer></v-spacer>
