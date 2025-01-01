@@ -5,21 +5,20 @@
         <v-card color="secondary" max-width="960px" class="mx-auto">
           <v-card-item>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" v-if="step === 1">
                 <p style="font-size: 3rem">Dating profile optimizer using AI</p>
-                <p v-if="step == 1">Tell me more about <strong>yourself</strong>, like your real Tinder profile.</p>
               </v-col>
 
               <v-col cols="12">
-                <p>Step {{ step }} / {{ max_step }}</p>
+                <p class="mt-4 ml-4">Step {{ step }} / {{ list_steps.length }} : {{ list_steps[step - 1] }}</p>
               </v-col>
 
-              <v-col cols="12">
+              <v-col cols="12" style="min-height: 420px">
                 <v-window v-model="step">
                   <v-window-item :value="1">
                     <v-card-text>
                       <v-select
-                          :items="countries"
+                          :items="list_countries"
                           :model-value="profileData.country"
                           density="compact"
                           label="I am from"
@@ -61,18 +60,17 @@
 
                   <v-window-item :value="4">
                     <v-card-text>
-                      <span>Interest as on your dating profile</span>
                       <v-chip-group column>
-                        <v-chip v-for="(interest, i) in profileData.profile.interest.sort()" variant="tonal" :key="i"
-                                :text="interest" @click="profileData.profile.interest.sort().splice(i, 1)"
+                        <v-chip v-for="(interest, i) in profileData.profile.interest" variant="tonal" :key="i"
+                                :text="interest" @click="profileData.profile.interest.splice(i, 1)"
                                 append-icon="mdi-close"></v-chip>
                       </v-chip-group>
 
-                      <v-text-field label="Search" placeholder="Netflix" variant="outlined" @keyup="filtered_interest_list = interest_list.filter((il) => {
+                      <v-text-field label="Search" placeholder="Netflix" variant="outlined" @keyup="filtered_interest_list = list_interests.filter((il) => {
                         return il.name.toUpperCase().indexOf(interest_search.toUpperCase()) > -1
                       })" v-model="interest_search"></v-text-field>
 
-                      <div style="max-height: 320px; overflow-y: scroll">
+                      <div style="max-height: 240px; overflow-y: scroll">
                         <v-chip-group column multiple>
                           <v-chip
                               v-for="(il, i) in filtered_interest_list"
@@ -88,14 +86,31 @@
                   </v-window-item>
 
                   <v-window-item :value="5">
-                    <v-card-text>
-                      <span>Prompts</span>
+                    <v-card-text style="max-height: 480px; overflow-y: scroll">
+                      <p style="font-size: 1.4rem" class="mb-4"></p>
+                      <v-row>
+                        <v-col cols="12" v-for="(d, di) in list_descriptors" :key="di">
+                          <v-sheet elevation="4" class="pa-4">
+                            <p style="font-size: 1.1rem" class="mb-2">{{ d.section_name }}</p>
+
+                            <div v-for="(dn, dni) in d.descriptors" :key="dni">
+                              <v-autocomplete
+                                  :label="dn.name"
+                                  :items="dn.choices.map(a => a.name)"
+                                  v-model="this.profileData.profile.descriptors[dni + (di > 0 ? cumulative_length[di - 1] : 0)].choice_selections"
+                                  variant="outlined"
+                                  :multiple="dn.type === 'multi_selection_set'"
+                              ></v-autocomplete>
+                            </div>
+                          </v-sheet>
+
+                        </v-col>
+                      </v-row>
 
                     </v-card-text>
                   </v-window-item>
                 </v-window>
               </v-col>
-
 
             </v-row>
           </v-card-item>
@@ -106,7 +121,7 @@
               Back
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn v-if="step < max_step" color="primary" variant="flat" @click="step++">
+            <v-btn v-if="step < list_steps.length" color="primary" variant="flat" @click="step++">
               Next
             </v-btn>
           </v-card-actions>
@@ -121,11 +136,14 @@
 </template>
 
 <script>
-import {interests} from "@/assets/static-data.js";
+import {INTERESTS_DATA, DESCRIPTORS_DATA} from "@/assets/static-data.js";
 
 export default {
   name: "DatingOptimizerCard",
   data: () => ({
+    list_countries: ['MY', 'DE', 'JP', 'NL'],
+    list_interests: [],
+    list_descriptors: [],
     profileData: {
       country: 'MY',
       profile: {
@@ -139,18 +157,38 @@ export default {
         school: {name: ''}
       }
     },
-    countries: ['MY', 'DE', 'JP', 'NL'],
     step: 1,
-    max_step: 5,
+    list_steps: ['Where are you from',
+      'Tell me more about yourself, like your real Tinder profile.',
+      'Are you a student or are you working?',
+      'Interest as on your dating profile',
+      'Common descriptors based on Tinder'],
     interest_search: '',
-    interest_list: [],
     filtered_interest_list: [],
-    prompts: [],
     isWorking: true,
+    cumulative_length: []
   }),
   mounted() {
-    this.interest_list = interests
-    this.filtered_interest_list = interests
+    this.list_interests = INTERESTS_DATA.sort()
+    this.filtered_interest_list = INTERESTS_DATA.sort()
+
+    let tmpDescriptor = []
+    let tmpCumulative = 0
+    for (let i = 0; i < DESCRIPTORS_DATA.length; i++) {
+      for (let j = 0; j < DESCRIPTORS_DATA[i].descriptors.length; j++) {
+        let currentDescriptor = DESCRIPTORS_DATA[i].descriptors[j]
+        tmpDescriptor.push({
+          "name": currentDescriptor.name,
+          "choice_selections": null
+        })
+      }
+
+      tmpCumulative += DESCRIPTORS_DATA[i].descriptors.length
+      this.cumulative_length.push(tmpCumulative)
+    }
+
+    this.profileData.profile.descriptors = tmpDescriptor
+    this.list_descriptors = DESCRIPTORS_DATA
   }
 }
 </script>
