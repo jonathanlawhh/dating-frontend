@@ -6,10 +6,8 @@
           <v-card-item>
             <v-row>
               <v-col cols="12">
-                <p style="font-size: 3rem">Tell me more about <strong>yourself</strong></p>
-                <p v-if="step == 1">Based on your "profile", let the model recommend ways to fine tune it based on the
-                  other profiles
-                  from that country. You are encouraged to fill in as close as your real Tinder profile.</p>
+                <p style="font-size: 3rem">Dating profile optimizer using AI</p>
+                <p v-if="step == 1">Tell me more about <strong>yourself</strong>, like your real Tinder profile.</p>
               </v-col>
 
               <v-col cols="12">

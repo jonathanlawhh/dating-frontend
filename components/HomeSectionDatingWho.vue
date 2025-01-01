@@ -2,7 +2,8 @@
   <v-sheet class="mx-auto" style="background: none" width="90%">
     <v-slide-group v-model="model" center-active>
       <v-slide-group-item v-for="(c, n) in card_details" :key="n" v-slot="{ isSelected, toggle }">
-        <v-card color="secondary" class="ma-4 dating-who-card" @click="toggle" style="transition: 0.1s ease-in" :style="isSelected ? 'transform: scale(1.03)' : ''">
+        <v-card color="secondary" class="ma-4 dating-who-card" @click="toggle" style="transition: 0.1s ease-in"
+                :style="isSelected ? 'transform: scale(1.03)' : ''">
           <v-row class="text-center text-white fill-height align-center justify-center">
             <v-col cols="12" class="mt-4">
               <p class="dating-person-font">"{{ c.who }}"</p>
@@ -13,7 +14,8 @@
               </div>
             </v-col>
             <v-col cols="12" md="6" class="pa-8">
-              <div class="d-flex fill-height align-center justify-center pa-4 dating-who-not-card" style="background: var(--custom-pink)">
+              <div class="d-flex fill-height align-center justify-center pa-4 dating-who-not-card"
+                   style="background: var(--custom-pink)">
                 <p>{{ c.not_who_detail }}</p>
               </div>
             </v-col>
@@ -28,7 +30,7 @@
 export default {
   name: "HomeSectionDatingWho",
   data: () => ({
-    model: null,
+    model: 0,
     card_details: [
       {
         'who': 'co-worker',
@@ -49,6 +51,11 @@ export default {
       },
     ]
   }),
+  mounted() {
+    setInterval(() => {
+      this.model = (this.model + 1 < this.card_details.length) ? this.model + 1 : 0
+    }, 3500)
+  }
 }
 </script>
 
@@ -60,6 +67,7 @@ export default {
 .dating-who-card {
   width: 640px;
   min-height: 320px;
+  box-shadow: 0 0 25px -10px var(--custom-orange);
 }
 
 .dating-who-not-card {
