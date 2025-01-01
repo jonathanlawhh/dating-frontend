@@ -4,6 +4,11 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: false },
   ssr: false,
+  runtimeConfig: {
+    public: {
+      endpointUrl: ''
+    }
+  },
   app: {
     head: {
       meta: [
