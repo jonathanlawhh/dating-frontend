@@ -9,13 +9,14 @@
 
 <script setup>
 let title = 'Dating Profiler'
-let desc = 'Using large language model to optimize dating profile. Do you know who you are really dating?'
+let desc = 'Exploring the use cases of AI while navigating the risk of authenticity in the modern dating scene'
 
 useSeoMeta({
   title: title,
   ogTitle: title,
   description: desc,
   ogDescription: desc,
+  ogImage: 'https://dating.jonathanlawhh.com/img/og_logo.png',
   twitterCard: 'summary_large_image',
 })
 
